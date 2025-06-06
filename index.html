@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZennxStore</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap');
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://i.ibb.co/RTz1QWwm/1f303b1cb345dcd99889d3a02314b719.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    h1 {
+      font-family: 'Fugaz One', cursive;
+      font-size: 2.7rem;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    h3, p {
+      font-style: italic;
+      color: black;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #ff9800, 0 0 10px #f44336; }
+      to { text-shadow: 0 0 20px #ff9800, 0 0 30px #f44336; }
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .product {
+      background: rgba(255,255,255,0.95);
+      border-radius: 10px;
+      padding: 1rem;
+      max-width: 200px;
+      color: #333;
+      text-align: center;
+      position: relative;
+    }
+    .product img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .sold-out {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #f44336;
+      color: white;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 10px;
+      background: #ff5722;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #e64a19;
+    }
+    #cart-popup {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: white;
+      color: black;
+      padding: 1rem;
+      border-radius: 10px;
+      width: 260px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      animation: popup 0.3s ease-out;
+    }
+    @keyframes popup {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    #cart-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #fff3e0;
+      color: #ff5722;
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 24px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    #cart-btn::after {
+      content: attr(data-count) ' | Rp ' attr(data-total);
+      position: absolute;
+      bottom: -24px;
+      right: 0;
+      font-size: 12px;
+      background: #ff5722;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+    .kontak {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+    }
+    .kontak a {
+      text-decoration: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .kontak img {
+      width: 37px;
+      height: 37px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ZennxStore</h1>
+    <h3>Sell Barang New & Second</h3>
+    <p>Berkualitas, awet, dan harga murmer dana pelajar</p>
+  </header>
+
+  <div class="products" id="product-list"></div>
+
+  <div id="cart-popup">
+    <strong>Keranjang:</strong>
+    <ul id="cart-items"></ul>
+    <a href="checkout.html"><button style="width: 100%; margin-top: 1rem;">Lanjut Checkout</button></a>
+  </div>
+  <a id="cart-btn" href="#" onclick="toggleCart()" data-count="0" data-total="0">🛒</a>
+
+  <div class="kontak">
+    <a href="https://wa.me/6285150731087"><img src="https://img.icons8.com/color/48/whatsapp--v1.png"/></a>
+    <a href="mailto:akmalsebastian89@gmail.com"><img src="https://img.icons8.com/color/48/new-post.png"/></a>
+    <a href="https://tiktok.com/@_xzennz"><img src="https://img.icons8.com/color/48/tiktok--v1.png"/></a>
+    <a href="https://t.me/xzennz"><img src="https://img.icons8.com/color/48/telegram-app--v1.png"/></a>
+  </div>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem('zennx_cart')) || [];
+
+    const products = [
+      { name: 'Sepatu Sport A', price: 95000, img: 'img/produk1.jpg', sold: false },
+      { name: 'Jaket Hoodie B', price: 120000, img: 'img/produk2.jpg', sold: false },
+      { name: 'Kaos Polos C', price: 30000, img: 'img/produk3.jpg', sold: false },
+      { name: 'Celana Jeans D', price: 85000, img: 'img/produk4.jpg', sold: false },
+      { name: 'Topi Trucker E', price: 40000, img: 'img/produk5.jpg', sold: false },
+      { name: 'Jam Tangan F', price: 150000, img: 'img/produk6.jpg', sold: true },
+      { name: 'Tas Selempang G', price: 70000, img: 'img/produk7.jpg', sold: false },
+      { name: 'Sweater Hangat H', price: 95000, img: 'img/produk8.jpg', sold: false },
+      { name: 'Kemeja Motif I', price: 60000, img: 'img/produk9.jpg', sold: true },
+      { name: 'Dompet Kulit J', price: 50000, img: 'img/produk10.jpg', sold: false },
+    ];
+
+    function renderProducts() {
+      const container = document.getElementById('product-list');
+      container.innerHTML = '';
+      products.forEach((p, i) => {
+        container.innerHTML += `
+          <div class="product">
+            <img src="${p.img}" alt="${p.name}">
+            <h4>${p.name}</h4>
+            <p>Rp ${p.price.toLocaleString('id-ID')}</p>
+            <small>Produk berkualitas kondisi masih bagus.</small>
+            ${p.sold ? '<div class="sold-out">SOLD OUT</div>' : `<button onclick="addToCart(${i})">Masukkan Keranjang</button>`}
+          </div>`;
+      });
+    }
+
+    function addToCart(index) {
+      cart.push(products[index]);
+      localStorage.setItem('zennx_cart', JSON.stringify(cart));
+      renderCart();
+      updateCartCount();
+    }
+
+    function renderCart() {
+      const list = document.getElementById('cart-items');
+      list.innerHTML = '';
+      cart.forEach((item, i) => {
+        list.innerHTML += `<li>${item.name} - Rp ${item.price.toLocaleString('id-ID')} <button onclick="removeItem(${i})">❌</button></li>`;
+      });
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('zennx_cart', JSON.stringify(cart));
+      renderCart();
+      updateCartCount();
+    }
+
+    function toggleCart() {
+      const popup = document.getElementById('cart-popup');
+      popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function updateCartCount() {
+      const btn = document.getElementById('cart-btn');
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      btn.setAttribute('data-count', cart.length);
+      btn.setAttribute('data-total', total.toLocaleString('id-ID'));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      renderCart();
+      updateCartCount();
+    });
+  </script>
+</body>
+  </html>
