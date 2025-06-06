@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesanan Berhasil - ZennxStore</title>
+  <style>
+    body {
+      background: #f1f1f1;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .success-box {
+      background: white;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      animation: pop 0.4s ease;
+      max-width: 360px;
+    }
+    @keyframes pop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .success-box img {
+      width: 90px;
+      margin-bottom: 1rem;
+    }
+    .success-box h2 {
+      color: #2ecc71;
+      margin: 0.5rem 0;
+    }
+    .success-box p {
+      color: #444;
+      margin: 0.8rem 0 1.8rem;
+      line-height: 1.4;
+    }
+    .success-box a {
+      display: inline-block;
+      background: #ff5722;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .success-box a:hover {
+      background: #e64a19;
+    }
+  </style>
+</head>
+<body>
+  <div class="success-box">
+    <img src="https://img.icons8.com/emoji/96/000000/check-mark-emoji.png" alt="success" />
+    <h2>Pesanan Berhasil!</h2>
+    <p>Terima kasih telah melakukan pemesanan di <strong>ZennxStore</strong>.<br/>Kami akan segera memprosesnya!</p>
+    <a href="index.html">Kembali ke Beranda</a>
+  </div>
+</body>
+</html>
